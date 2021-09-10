@@ -35,7 +35,7 @@ namespace FundooNotes.Controllers
 
                 if(result==true)
                 {
-                    return this.Ok(new { Success = true, message = "Registered User SuccessFully!" });
+                    return this.Ok(new { Success = true, message = "Registered User Successfully!" });
                 }
                 else
                 {
