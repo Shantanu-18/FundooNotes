@@ -22,8 +22,8 @@ namespace BusinessLayer.Services
             try
             {
                 List<UserModel> userModels = new List<UserModel>();
-                userModels.Add(new UserModel { FirstName = "Shantanu", LastName = "Borkar", Email = "asasd@ga" });
-                userModels.Add(new UserModel { FirstName = "Xyz", LastName = "Abc", Email = "asasd@ga" });
+                //userModels.Add(new UserModel { FirstName = "Shantanu", LastName = "Borkar", Email = "asasd@ga" });
+                //userModels.Add(new UserModel { FirstName = "Xyz", LastName = "Abc", Email = "asasd@ga" });
 
                 return userModels;
             }
