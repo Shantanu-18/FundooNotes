@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FundooNotes.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -33,7 +33,7 @@ namespace FundooNotes.Controllers
             {
                 bool result = this._userBL.RegisterUser(userModel);
 
-                if(result==true)
+                if (result == true)
                 {
                     return this.Ok(new { Success = true, message = "Registered User Successfully!" });
                 }
@@ -42,14 +42,31 @@ namespace FundooNotes.Controllers
                     return this.BadRequest(new { Success = false, message = "User registration failed!!" });
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                return this.BadRequest(new
+                return this.BadRequest(new { success = false, message = e.Message, stackTrace = e.StackTrace });
+            }
+        }
+
+        [HttpPost("authenticate")]
+        public IActionResult UserLogin(LogInModel logInModel)
+        {
+            try
+            {
+                bool result = _userBL.UserLogIn(logInModel);
+
+                if (result == true)
                 {
-                    success = false,
-                    message= e.Message,
-                    stackTrace=e.StackTrace
-                });
+                    return this.Ok(new { Success = true, Message = "Log In Successful!!" });
+                }
+                else
+                {
+                    return this.Ok(new { Success = this.NotFound(), Message = "Log In Failed!!" });
+                }
+            }
+            catch (Exception e)
+            {
+                return this.BadRequest(new { Success = false, Message = e.Message, stackTrace = e.StackTrace });
             }
         }
     }
