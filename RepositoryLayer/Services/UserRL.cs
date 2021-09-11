@@ -4,6 +4,7 @@ using RepositoryLayer.Context;
 using RepositoryLayer.Entity;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace BusinessLayer.Services
@@ -14,7 +15,7 @@ namespace BusinessLayer.Services
 
         public UserRL(UserContext userContext)
         {
-           this._userContext = userContext;
+            this._userContext = userContext;
         }
 
         public List<UserModel> getAllUsers()
@@ -27,7 +28,7 @@ namespace BusinessLayer.Services
 
                 return userModels;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw;
             }
@@ -48,11 +49,33 @@ namespace BusinessLayer.Services
                 this._userContext.Users.Add(user);
                 int result = _userContext.SaveChanges();
 
-                if(result>0)
+                if (result > 0)
                 {
                     return true;
                 }
                 else { return false; }
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
+        public bool UserLogIn(LogInModel logInModel)
+        {
+            try
+            {
+                var result = _userContext.Users.SingleOrDefault(e => e.Email == logInModel.email 
+                                                                    && e.Password == logInModel.password);
+
+                if (result == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
             }
             catch (Exception e)
             {
