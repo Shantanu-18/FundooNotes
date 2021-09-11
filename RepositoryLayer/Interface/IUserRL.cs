@@ -9,5 +9,6 @@ namespace BusinessLayer.Interface
     {
         List<UserModel> getAllUsers();
         bool RegisterUser(UserModel userModel);
+        bool UserLogIn(LogInModel logInModel);
     }
 }
