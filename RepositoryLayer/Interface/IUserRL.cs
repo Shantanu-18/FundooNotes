@@ -1,4 +1,5 @@
 ﻿using CommonLayer;
+using RepositoryLayer.Entity;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,6 +10,6 @@ namespace BusinessLayer.Interface
     {
         List<UserModel> getAllUsers();
         bool RegisterUser(UserModel userModel);
-        bool UserLogIn(LogInModel logInModel);
+        User UserLogIn(LogInModel logInModel);
     }
 }
