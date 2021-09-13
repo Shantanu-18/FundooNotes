@@ -12,7 +12,7 @@ namespace BusinessLayer.Services
     public class UserRL : IUserRL
     {
         private UserContext _userContext;
-
+       
         public UserRL(UserContext userContext)
         {
             this._userContext = userContext;
@@ -61,21 +61,14 @@ namespace BusinessLayer.Services
             }
         }
 
-        public bool UserLogIn(LogInModel logInModel)
+        public User UserLogIn(LogInModel logInModel)
         {
             try
             {
                 var result = _userContext.Users.SingleOrDefault(e => e.Email == logInModel.email 
                                                                     && e.Password == logInModel.password);
 
-                if (result == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+                return result;
             }
             catch (Exception e)
             {
