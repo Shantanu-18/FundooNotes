@@ -1,10 +1,17 @@
 ﻿using BusinessLayer.Interface;
 using CommonLayer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using RepositoryLayer.Entity;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace FundooNotes.Controllers
@@ -14,10 +21,14 @@ namespace FundooNotes.Controllers
     public class UserController : ControllerBase
     {
         private IUserBL _userBL;
-        public UserController(IUserBL userBL)
+        private IConfiguration _config;
+
+        public UserController(IUserBL userBL, IConfiguration configuration)
         {
             this._userBL = userBL;
+            _config = configuration;
         }
+
 
         [HttpGet]
         public IActionResult userData()
@@ -48,28 +59,50 @@ namespace FundooNotes.Controllers
             }
         }
 
+
+        [AllowAnonymous]
         [HttpPost("authenticate")]
-        public IActionResult UserLogin(LogInModel logInModel)
+        public IActionResult Login([FromBody] LogInModel login)
         {
             try
             {
-                bool result = _userBL.UserLogIn(logInModel);
+                IActionResult response = Unauthorized();
+                User user = _userBL.UserLogIn(login);
 
-                if (result == true)
+                if (user != null)
                 {
-                    return this.Ok(new { Success = true, Message = "Log In Successful!!" });
+                    var tokenString = GenerateJSONWebToken(user.Id,user.Email);
+                    var userData = new { Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email, CreatedAt = user.CreatedAt };
+                    response = Ok(new { Success = true, Message = "Log In Successful!!", token = tokenString, Data = userData });
                 }
-                else
-                {
-                    return this.Ok(new { Success = this.NotFound(), Message = "Log In Failed!!" });
-                }
+
+                return response;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return this.BadRequest(new { Success = false, Message = e.Message, stackTrace = e.StackTrace });
+
+                throw;
             }
+           
+        }
+
+        private string GenerateJSONWebToken(long Id,string email)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var claims = new[] { 
+                new Claim("Id",Id.ToString()),
+                new Claim(ClaimTypes.Email,email)
+            };
+
+            var token = new JwtSecurityToken(
+                _config["Jwt:Issuer"],
+                _config["Jwt:Issuer"],
+                claims,
+                expires: DateTime.Now.AddMinutes(120),
+                signingCredentials: credentials);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
-
-
 }
