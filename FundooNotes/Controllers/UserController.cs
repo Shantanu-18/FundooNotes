@@ -29,8 +29,8 @@ namespace FundooNotes.Controllers
             _config = configuration;
         }
 
-
         [HttpGet]
+        [Authorize]
         public IActionResult userData()
         {
             var useList = this._userBL.getAllUsers();
