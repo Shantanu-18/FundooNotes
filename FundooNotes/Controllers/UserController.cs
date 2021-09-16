@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Interface;
 using CommonLayer;
+using CommonLayer.MSMQ;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,12 @@ namespace FundooNotes.Controllers
             _config = configuration;
         }
 
+        private long GetTokenId()
+        {
+            long userId = Convert.ToInt64(User.FindFirst("Id").Value);
+            return userId;
+        }
+
         [HttpGet]
         [Authorize]
         public IActionResult userData()
@@ -46,22 +53,22 @@ namespace FundooNotes.Controllers
 
                 if (result == true)
                 {
-                    return this.Ok(new { Success = true, message = "Registered User Successfully!" });
+                    return Ok(new { Success = true, message = "Registered User Successfully!" });
                 }
                 else
                 {
-                    return this.BadRequest(new { Success = false, message = "User registration failed!!" });
+                    return BadRequest(new { Success = false, message = "User registration failed!!" });
                 }
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { success = false, message = e.Message, stackTrace = e.StackTrace });
+                return BadRequest(new { success = false, message = e.Message, stackTrace = e.StackTrace });
             }
         }
 
 
         [AllowAnonymous]
-        [HttpPost("authenticate")]
+        [HttpPost("Authenticate")]
         public IActionResult Login([FromBody] LogInModel login)
         {
             try
@@ -71,26 +78,86 @@ namespace FundooNotes.Controllers
 
                 if (user != null)
                 {
-                    var tokenString = GenerateJSONWebToken(user.Id,user.Email);
+                    var tokenString = GenerateJSONWebToken(user.Id, user.Email);
                     var userData = new { Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email, CreatedAt = user.CreatedAt };
-                    response = Ok(new { Success = true, Message = "Log In Successful!!", token = tokenString, Data = userData });
+                    response = Ok(new { Success = true, Message = "Log In Successfull.", token = tokenString, Data = userData });
                 }
 
                 return response;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
-                throw;
+                return BadRequest(new { success = false, message = e.Message, stackTrace = e.StackTrace });
             }
-           
+
         }
 
-        private string GenerateJSONWebToken(long Id,string email)
+        [AllowAnonymous]
+        [HttpPost("ForgotPassword")]
+        public IActionResult ForgotPassword(ForgotPassModel forgotModel)
+        {
+            try
+            {
+                User user = _userBL.ForgotPassword(forgotModel);
+
+                if (user != null)
+                {
+                    string tokenString = GenerateJSONWebToken(user.Id, user.Email);
+
+                    new MsmqOperations().SendingData(tokenString);
+
+                    return Ok(new { Success = true, message = "Successfull." });
+                }
+                else
+                {
+                    return BadRequest(new { Success = false, message = "Unsuccessfull." });
+                }
+            }
+            catch (Exception e)
+            {
+
+                return BadRequest(new { success = false, message = e.Message, stackTrace = e.StackTrace });
+            }
+        }
+
+        [Authorize]
+        [HttpPut("ResetPassword")]
+        public IActionResult ResetPassword(ResetPasswordModel resetPasswordModel)
+        {
+            try
+            {
+                if (resetPasswordModel.Password == resetPasswordModel.ConfirmPassword)
+                {
+                    long UserId = GetTokenId();
+                    User user = _userBL.ResetPassword(resetPasswordModel, UserId);
+
+                    if (user != null)
+                    {
+                        return this.Ok(new { Success = true, message = "Password Changed Successfully." });
+                    }
+                    else
+                    {
+                        return this.BadRequest(new { Success = false, message = "Something went wrong." });
+                    }
+                }
+                else
+                {
+                    return this.BadRequest(new { Success = false, message = "Password should be same." });
+                }
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { success = false, message = e.Message, stackTrace = e.StackTrace });
+            }
+        }
+
+
+        private string GenerateJSONWebToken(long Id, string email)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var claims = new[] { 
+            var claims = new[] {
                 new Claim("Id",Id.ToString()),
                 new Claim(ClaimTypes.Email,email)
             };
