@@ -12,11 +12,13 @@ namespace BusinessLayer.Services
     public class UserRL : IUserRL
     {
         private UserContext _userContext;
-       
+        User user = new User();
+
         public UserRL(UserContext userContext)
         {
             this._userContext = userContext;
         }
+
 
         public List<UserModel> getAllUsers()
         {
@@ -28,7 +30,7 @@ namespace BusinessLayer.Services
 
                 return userModels;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw;
             }
@@ -38,7 +40,6 @@ namespace BusinessLayer.Services
         {
             try
             {
-                User user = new User();
                 user.FirstName = userModel.FirstName;
                 user.LastName = userModel.LastName;
                 user.Email = userModel.Email;
@@ -55,7 +56,7 @@ namespace BusinessLayer.Services
                 }
                 else { return false; }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw;
             }
@@ -65,12 +66,47 @@ namespace BusinessLayer.Services
         {
             try
             {
-                var result = _userContext.Users.SingleOrDefault(e => e.Email == logInModel.email 
+                var result = _userContext.Users.SingleOrDefault(e => e.Email == logInModel.email
                                                                     && e.Password == logInModel.password);
 
                 return result;
             }
-            catch (Exception e)
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public User ForgotPassword(ForgotPassModel forgotPassModel)
+        {
+            try
+            {
+                var result = _userContext.Users.SingleOrDefault(e => e.Email == forgotPassModel.Email);
+
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public User ResetPassword(ResetPasswordModel resetPasswordModel, long UserId)
+        {
+            try
+            {
+                var result = _userContext.Users.SingleOrDefault(e => e.Id == UserId);
+
+                if (result != null)
+                {
+                    result.Password = resetPasswordModel.Password;
+                    result.ModifiedAt = DateTime.Now;
+                    _userContext.SaveChanges();
+                }
+
+                return result;
+            }
+            catch (Exception)
             {
                 throw;
             }
