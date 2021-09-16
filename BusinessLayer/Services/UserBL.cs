@@ -16,13 +16,14 @@ namespace BusinessLayer.Services
             this._userRL = userRL;
         }
 
+
         public List<UserModel> getAllUsers()
         {
             try
             {
                 return this._userRL.getAllUsers();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw;
             }
@@ -34,7 +35,7 @@ namespace BusinessLayer.Services
             {
                 return this._userRL.RegisterUser(userModel);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw;
             }
@@ -47,6 +48,30 @@ namespace BusinessLayer.Services
                 return _userRL.UserLogIn(logInModel);
             }
             catch (Exception e)
+            {
+                throw;
+            }
+        }
+
+        public User ForgotPassword(ForgotPassModel forgotPassModel)
+        {
+            try
+            {
+                return _userRL.ForgotPassword(forgotPassModel);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public User ResetPassword(ResetPasswordModel resetPasswordModel, long UserId)
+        {
+            try
+            {
+                return _userRL.ResetPassword(resetPasswordModel, UserId);
+            }
+            catch (Exception)
             {
                 throw;
             }
