@@ -29,11 +29,11 @@ namespace BusinessLayer.Services
             }
         }
 
-        public List<Note> GetAllNotes()
+        public List<Note> GetAllNotes(long userId)
         {
             try
             {
-                return _noteRL.GetAllNotes();
+                return _noteRL.GetAllNotes(userId);
             }
             catch (Exception)
             {

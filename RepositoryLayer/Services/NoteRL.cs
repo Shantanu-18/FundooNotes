@@ -52,11 +52,11 @@ namespace RepositoryLayer.Services
         }
 
 
-        public List<Note> GetAllNotes()
+        public List<Note> GetAllNotes(long userId)
         {
             try
             {
-                var result = _userContext.Notes.ToList();
+                var result = _userContext.Notes.Where(e => e.UserId == userId).ToList();
 
                 return result;
             }
@@ -74,7 +74,6 @@ namespace RepositoryLayer.Services
 
                 if (result != null)
                 {
-
                     _userContext.Notes.Remove(result);
                     _userContext.SaveChanges();
 
