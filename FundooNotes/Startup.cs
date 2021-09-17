@@ -1,5 +1,6 @@
 using BusinessLayer.Interface;
 using BusinessLayer.Services;
+using CommonLayer.MSMQ;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -76,6 +77,8 @@ namespace FundooNotes
                     { securitySchema, new[] { "Bearer" } }
                 });
             });
+
+            services.Configure<Smtp>(Configuration.GetSection("Smtp"));
 
             services.AddControllers();
         }
