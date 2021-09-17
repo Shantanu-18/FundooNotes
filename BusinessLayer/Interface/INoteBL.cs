@@ -12,8 +12,9 @@ namespace BusinessLayer.Interface
 
         bool AddNotes(NotesModel notesModel, long Id);
 
-        public bool DeleteNotes(long id, long userId);
+        bool DeleteNotes(long id, long userId);
 
-        public bool UpdateNotes(long id, long userId, NotesModel notesModel);
+        bool UpdateNotes(long id, long userId, NotesModel notesModel);
+        bool ChangeColor(long noteId, long userId, NotesModel notesModel);
     }
 }
