@@ -8,7 +8,7 @@ namespace BusinessLayer.Interface
 {
     public interface INoteBL
     {
-        List<Note> GetAllNotes();
+        List<Note> GetAllNotes(long userId);
 
         bool AddNotes(NotesModel notesModel, long Id);
 
