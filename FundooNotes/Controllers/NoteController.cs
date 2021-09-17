@@ -57,7 +57,8 @@ namespace FundooNotes.Controllers
         {
             try
             {
-                var NotesList = _noteBL.GetAllNotes();
+                long userId = GetTokenId();
+                var NotesList = _noteBL.GetAllNotes(userId);
 
                 return this.Ok(new { Success = true, message = "Get User Notes Successfully.", Data = NotesList });
             }
