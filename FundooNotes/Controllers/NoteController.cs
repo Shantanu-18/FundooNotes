@@ -115,5 +115,31 @@ namespace FundooNotes.Controllers
             }
 
         }
+
+        //[HttpPost("{NoteId:long}")]
+        //[Route("ChangeColour")]
+        [HttpPut("ChangeColour")]
+        public IActionResult ChangeColor(long noteId, NotesModel notesModel)
+        {
+            long userId = GetTokenId();
+            bool result = _noteBL.ChangeColor(noteId, userId, notesModel);
+
+            try
+            {
+                if (result == true)
+                {
+                    return Ok(new { Success = true, message = "Color changed Successfully !!" });
+                }
+                else
+                {
+                    return BadRequest(new { Success = false, message = "Color not changed !!" });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { Success = false, message = e.Message, stackTrace = e.StackTrace });
+            }
+        }
+
     }
 }
