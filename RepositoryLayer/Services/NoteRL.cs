@@ -134,7 +134,6 @@ namespace RepositoryLayer.Services
                     result.Color = notesModel.Color;
                     result.ModifiedAt = DateTime.Now;
                 }
-                //_userContext.Notes.Add(result);
                 int changes = _userContext.SaveChanges();
 
                 if (changes > 0)
@@ -145,10 +144,36 @@ namespace RepositoryLayer.Services
             }
             catch (Exception)
             {
-
                 throw;
             }
-            throw new NotImplementedException();
+        }
+
+        public bool IsPinned(long noteId, long userId, bool value)
+        {
+            try
+            {
+                var result = _userContext.Notes.FirstOrDefault(e => e.Id == noteId && e.UserId == userId);
+
+                if (result != null)
+                {
+                    if (result.isPin != value)
+                    {
+                        result.isPin = value;
+                    }
+                    result.ModifiedAt = DateTime.Now;
+                }
+                int changes = _userContext.SaveChanges();
+
+                if (changes > 0)
+                {
+                    return true;
+                }
+                else { return false; }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

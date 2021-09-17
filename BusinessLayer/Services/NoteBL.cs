@@ -76,5 +76,17 @@ namespace BusinessLayer.Services
                 throw;
             }
         }
+
+        public bool IsPinned(long noteId, long userId, bool value)
+        {
+            try
+            {
+                return _noteRL.IsPinned(noteId, userId, value);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
