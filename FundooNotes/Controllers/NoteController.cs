@@ -29,7 +29,7 @@ namespace FundooNotes.Controllers
             return userId;
         }
 
-        [HttpPost]
+        [HttpPost("AddNote")]
         public IActionResult AddNote(NotesModel notesModel)
         {
             try
@@ -52,7 +52,7 @@ namespace FundooNotes.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("GetNotes")]
         public IActionResult GetNotes()
         {
             try
@@ -68,7 +68,7 @@ namespace FundooNotes.Controllers
             }
         }
 
-        [HttpDelete("{id:long}")]
+        [HttpDelete("DeleteNotes")]
         public IActionResult DeleteNotes(long id)
         {
             try
@@ -92,7 +92,7 @@ namespace FundooNotes.Controllers
 
         }
 
-        [HttpPut("{id:long}")]
+        [HttpPut("UpdateNotes")]
         public IActionResult UpdateNotes(long id, NotesModel notesModel)
         {
             try
@@ -116,8 +116,7 @@ namespace FundooNotes.Controllers
 
         }
 
-        //[HttpPost("{NoteId:long}")]
-        //[Route("ChangeColour")]
+        
         [HttpPut("ChangeColour")]
         public IActionResult ChangeColor(long noteId, NotesModel notesModel)
         {
@@ -133,6 +132,29 @@ namespace FundooNotes.Controllers
                 else
                 {
                     return BadRequest(new { Success = false, message = "Color not changed !!" });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { Success = false, message = e.Message, stackTrace = e.StackTrace });
+            }
+        }
+
+        [HttpPut("isPinned")]
+        public IActionResult IsPinned(long noteId,bool value)
+        {
+            long userId = GetTokenId();
+            bool result = _noteBL.IsPinned(noteId, userId, value);
+
+            try
+            {
+                if (result == true)
+                {
+                    return Ok(new { Success = true, message = "Successful" });
+                }
+                else
+                {
+                    return BadRequest(new { Success = false, message = "Unsuccessful" });
                 }
             }
             catch (Exception e)
