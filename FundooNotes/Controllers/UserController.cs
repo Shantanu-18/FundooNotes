@@ -106,7 +106,7 @@ namespace FundooNotes.Controllers
 
                     new MsmqOperations().SendingData(tokenString);
 
-                    return Ok(new { Success = true, message = "Successfull." });
+                    return Ok(new { Success = true, message = "Reset password link is sent via mail to you." });
                 }
                 else
                 {
