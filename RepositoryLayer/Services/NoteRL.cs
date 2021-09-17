@@ -12,6 +12,7 @@ namespace RepositoryLayer.Services
     public class NoteRL : INoteRL
     {
         private UserContext _userContext;
+        Note note = new Note();
 
         public NoteRL(UserContext userContext)
         {
@@ -22,7 +23,6 @@ namespace RepositoryLayer.Services
         {
             try
             {
-                Note note = new Note();
                 note.Title = notesModel.Title;
                 note.Message = notesModel.Message;
                 note.Remainder = notesModel.Remainder;
@@ -121,6 +121,34 @@ namespace RepositoryLayer.Services
             {
                 throw;
             }
+        }
+
+        public bool ChangeColor(long noteId, long userId, NotesModel notesModel)
+        {
+            try
+            {
+                var result = _userContext.Notes.FirstOrDefault(e => e.Id == noteId && e.UserId == userId);
+
+                if (result != null)
+                {
+                    result.Color = notesModel.Color;
+                    result.ModifiedAt = DateTime.Now;
+                }
+                //_userContext.Notes.Add(result);
+                int changes = _userContext.SaveChanges();
+
+                if (changes > 0)
+                {
+                    return true;
+                }
+                else { return false; }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            throw new NotImplementedException();
         }
     }
 }
