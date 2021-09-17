@@ -16,5 +16,6 @@ namespace BusinessLayer.Interface
 
         bool UpdateNotes(long id, long userId, NotesModel notesModel);
         bool ChangeColor(long noteId, long userId, NotesModel notesModel);
+        bool IsPinned(long noteId, long userId, bool value);
     }
 }
