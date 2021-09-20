@@ -15,7 +15,17 @@ namespace BusinessLayer.Interface
         bool DeleteNotes(long id, long userId);
 
         bool UpdateNotes(long id, long userId, NotesModel notesModel);
+
         bool ChangeColor(long noteId, long userId, NotesModel notesModel);
-        bool IsPinned(long noteId, long userId, bool value);
+
+        bool IsPinned(long noteId, long userId);
+
+        bool IsTrash(long noteId, long userId, bool value);
+
+        bool IsArchive(long noteId, long userId, bool value);
+
+        List<Note> GetTrash(long userId);
+
+        List<Note> GetArchived(long userId);
     }
 }
