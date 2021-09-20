@@ -38,6 +38,9 @@ namespace FundooNotes
             services.AddTransient<INoteBL, NoteBL>();
             services.AddTransient<INoteRL, NoteRL>();
 
+            services.AddTransient<ICollaborationBL, CollaborationBL>();
+            services.AddTransient<ICollaborationRL, CollaborationRL>();
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
@@ -77,8 +80,6 @@ namespace FundooNotes
                     { securitySchema, new[] { "Bearer" } }
                 });
             });
-
-            services.Configure<Smtp>(Configuration.GetSection("Smtp"));
 
             services.AddControllers();
         }
