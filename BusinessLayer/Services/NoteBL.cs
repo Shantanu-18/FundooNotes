@@ -77,11 +77,59 @@ namespace BusinessLayer.Services
             }
         }
 
-        public bool IsPinned(long noteId, long userId, bool value)
+        public bool IsPinned(long noteId, long userId)
         {
             try
             {
-                return _noteRL.IsPinned(noteId, userId, value);
+                return _noteRL.IsPinned(noteId, userId);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool IsTrash(long noteId, long userId, bool value)
+        {
+            try
+            {
+                return _noteRL.IsTrash(noteId, userId, value);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool IsArchive(long noteId, long userId, bool value)
+        {
+            try
+            {
+                return _noteRL.IsArchive(noteId, userId, value);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public List<Note> GetTrash(long userId)
+        {
+            try
+            {
+                return _noteRL.GetTrash(userId);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public List<Note> GetArchived(long userId)
+        {
+            try
+            {
+                return _noteRL.GetArchived(userId);
             }
             catch (Exception)
             {

@@ -56,7 +56,9 @@ namespace RepositoryLayer.Services
         {
             try
             {
-                var result = _userContext.Notes.Where(e => e.UserId == userId).ToList();
+                var result = _userContext.Notes.Where(e => e.UserId == userId
+                                                         && e.isArchive == false
+                                                         && e.isTrash == false).ToList();
 
                 return result;
             }
@@ -148,7 +150,7 @@ namespace RepositoryLayer.Services
             }
         }
 
-        public bool IsPinned(long noteId, long userId, bool value)
+        public bool IsPinned(long noteId, long userId)
         {
             try
             {
@@ -156,9 +158,13 @@ namespace RepositoryLayer.Services
 
                 if (result != null)
                 {
-                    if (result.isPin != value)
+                    if (result.isPin == true)
                     {
-                        result.isPin = value;
+                        result.isPin = false;
+                    }
+                    else if (result.isPin == false)
+                    {
+                        result.isPin = true;
                     }
                     result.ModifiedAt = DateTime.Now;
                 }
@@ -174,6 +180,103 @@ namespace RepositoryLayer.Services
             {
                 throw;
             }
+        }
+
+        public bool IsTrash(long noteId, long userId, bool value)
+        {
+            try
+            {
+                var result = _userContext.Notes.FirstOrDefault(e => e.Id == noteId && e.UserId == userId);
+
+                if (result != null)
+                {
+                    if (value == true)
+                    {
+                        result.isTrash = true;
+                    }
+                    else
+                    {
+                        result.isTrash = false;
+                    }
+                    result.ModifiedAt = DateTime.Now;
+                }
+                int changes = _userContext.SaveChanges();
+
+                if (changes > 0)
+                {
+                    return true;
+                }
+                else { return false; }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool IsArchive(long noteId, long userId, bool value)
+        {
+            try
+            {
+                var result = _userContext.Notes.FirstOrDefault(e => e.Id == noteId && e.UserId == userId);
+
+                if (result != null)
+                {
+                    if (value == true)
+                    {
+                        result.isArchive = true;
+                    }
+                    else
+                    {
+                        result.isArchive = false;
+                    }
+                    result.ModifiedAt = DateTime.Now;
+                }
+                int changes = _userContext.SaveChanges();
+
+                if (changes > 0) return true;
+
+                else return false;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public List<Note> GetTrash(long userId)
+        {
+            try
+            {
+                var result = _userContext.Notes.Where(e => e.UserId == userId && e.isTrash == true).ToList();
+
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public List<Note> GetArchived(long userId)
+        {
+            try
+            {
+                var result = _userContext.Notes.Where(e => e.UserId == userId && e.isArchive == true).ToList();
+
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public Note GetNoteId(long noteId, long userId)
+        {
+            var result = _userContext.Notes.FirstOrDefault(e => e.Id == noteId && e.UserId == userId);
+
+            return result;
         }
     }
 }
