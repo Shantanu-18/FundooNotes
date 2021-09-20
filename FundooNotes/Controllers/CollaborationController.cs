@@ -47,5 +47,33 @@ namespace FundooNotes.Controllers
                 return BadRequest(new { success = false, message = e.Message, stackTrace = e.StackTrace });
             }
         }
+
+        [HttpGet]
+        [Route("noteId/GetCollaborations")]
+        public IActionResult GetCollab(long noteId)
+        {
+            try
+            {
+                long userId = GetTokenId();
+                var collabList = _collaborationBL.GetCollab(noteId, userId);
+
+                if (collabList.Count != 0)
+                {
+                    return Ok(new { success = true, message = "These are the Collaborations of these note.", data = collabList });
+                }
+                else if (collabList.Count == 0)
+                {
+                    return BadRequest(new { Success = false, message = "No collaboration found." });
+                }
+                else
+                {
+                    return BadRequest(new { Success = false, message = "Something went wrong." });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { Success = false, message = e.Message, stackTrace = e.StackTrace });
+            }
+        }
     }
 }
