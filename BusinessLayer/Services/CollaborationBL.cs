@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.Interface;
+using RepositoryLayer.Entity;
 using RepositoryLayer.Interface;
 using RepositoryLayer.Services;
 using System;
@@ -37,6 +38,18 @@ namespace BusinessLayer.Services
                     return false;
                 }
                 return _collaborationRL.AddCollab(noteId, userId, collabEmail);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public List<Collaboration> GetCollab(long noteId, long userId)
+        {
+            try
+            {
+                return _collaborationRL.GetCollab(noteId, userId);
             }
             catch (Exception)
             {

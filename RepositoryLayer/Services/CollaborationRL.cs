@@ -38,5 +38,19 @@ namespace RepositoryLayer.Services
                 throw;
             }
         }
+
+        public List<Collaboration> GetCollab(long noteId, long userId)
+        {
+            try
+            {
+                var result = _userContext.Collaborations.Where(e => e.NoteId == noteId && e.UserId == userId).ToList();
+
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
