@@ -12,14 +12,10 @@ namespace CommonLayer.MSMQ
     public class MsmqOperations
     {
         MessageQueue msmq = new MessageQueue();
-        private readonly Smtp _smtp;
-        public MsmqOperations(IOptions<Smtp> options)
+        private IConfiguration _config;
+        public MsmqOperations(IConfiguration config)
         {
-            _smtp = options.Value;
-        }
-
-        public MsmqOperations()
-        {
+            _config = config;
         }
 
         public void SendingData(string token)
@@ -76,26 +72,19 @@ namespace CommonLayer.MSMQ
             mailMessage.Subject = "Reset password link.";
 
             var body = new StringBuilder();
-            
+
             body.AppendLine("Hello, To Reset your Account Password click the link below.");
-            body.AppendLine("<a href=\"https://localhost:5001/User/ResetPassword/"+token+"\">Click Here</a>");
+            body.AppendLine("<a href=\"https://localhost:5001/User/ResetPassword/" + token + "\">Click Here</a>");
             mailMessage.Body = body.ToString();
             mailMessage.IsBodyHtml = true;
 
-            SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
-
+            SmtpClient smtpClient = new SmtpClient(_config["Smtp:Host"], Convert.ToInt32(_config["Smtp:Port"]));
             smtpClient.Credentials = new NetworkCredential()
             {
-                UserName = "sendertohost@gmail.com",
-                Password = "Test@123"
+                UserName = _config["Smtp:Username"],
+                Password = _config["Smtp:Password"]
             };
 
-            //var smtpClient = new SmtpClient(_smtp.Host)
-            //{
-            //    Port = _smtp.Port,
-            //    Credentials = new NetworkCredential(_smtp.UserName, _smtp.Password),
-            //    EnableSsl = true,
-            //};
             smtpClient.EnableSsl = true;
             smtpClient.Send(mailMessage);
         }
