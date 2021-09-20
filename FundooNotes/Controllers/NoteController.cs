@@ -4,9 +4,12 @@ using CommonLayer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RepositoryLayer.Context;
+using RepositoryLayer.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace FundooNotes.Controllers
@@ -60,15 +63,27 @@ namespace FundooNotes.Controllers
                 long userId = GetTokenId();
                 var NotesList = _noteBL.GetAllNotes(userId);
 
-                return this.Ok(new { Success = true, message = "Get User Notes Successfully.", Data = NotesList });
+                if (NotesList.Count != 0)
+                {
+                    return this.Ok(new { Success = true, message = "These are Your all the notes.", Data = NotesList });
+                }
+                else if (NotesList.Count == 0)
+                {
+                    return BadRequest(new { Success = false, message = "Nothing is added in notes." });
+                }
+                else
+                {
+                    return BadRequest(new { Success = false, message = "Something went wrong." });
+                }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                return BadRequest(new { Success = false, message = e.Message, stackTrace = e.StackTrace });
             }
         }
 
-        [HttpDelete("DeleteNotes")]
+        [HttpDelete]
+        [Route("noteId/DeleteNotes")]
         public IActionResult DeleteNotes(long id)
         {
             try
@@ -92,17 +107,18 @@ namespace FundooNotes.Controllers
 
         }
 
-        [HttpPut("UpdateNotes")]
-        public IActionResult UpdateNotes(long id, NotesModel notesModel)
+        [HttpPut]
+        [Route("noteId/UpdateNotes")]
+        public IActionResult UpdateNotes(long noteId, NotesModel notesModel)
         {
             try
             {
                 var userId = GetTokenId();
-                var result = this._noteBL.UpdateNotes(id, userId, notesModel);
+                var result = this._noteBL.UpdateNotes(noteId, userId, notesModel);
 
                 if (result == true)
                 {
-                    return this.Ok(new { Success = true, message = "Note Updated SuccessFully.", id });
+                    return this.Ok(new { Success = true, message = "Note Updated SuccessFully.", noteId });
                 }
                 else
                 {
@@ -116,8 +132,9 @@ namespace FundooNotes.Controllers
 
         }
 
-        
-        [HttpPut("ChangeColour")]
+
+        [HttpPut]
+        [Route("noteId/ChangeColour")]
         public IActionResult ChangeColor(long noteId, NotesModel notesModel)
         {
             long userId = GetTokenId();
@@ -140,11 +157,12 @@ namespace FundooNotes.Controllers
             }
         }
 
-        [HttpPut("isPinned")]
-        public IActionResult IsPinned(long noteId,bool value)
+        [HttpPut]
+        [Route("noteId/Pin")]
+        public IActionResult IsPinned(long noteId)
         {
             long userId = GetTokenId();
-            bool result = _noteBL.IsPinned(noteId, userId, value);
+            bool result = _noteBL.IsPinned(noteId, userId);
 
             try
             {
@@ -163,5 +181,108 @@ namespace FundooNotes.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("noteId/Trash")]
+        public IActionResult IsTrash(long noteId, bool value)
+        {
+            long userId = GetTokenId();
+            bool result = _noteBL.IsTrash(noteId, userId, value);
+
+            try
+            {
+                if (result == true)
+                {
+                    return Ok(new { Success = true, message = "Successful" });
+                }
+                else
+                {
+                    return BadRequest(new { Success = false, message = "Unsuccessful" });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { Success = false, message = e.Message, stackTrace = e.StackTrace });
+            }
+        }
+
+        [HttpPut]
+        [Route("noteId/Archive")]
+        public IActionResult IsArchive(long noteId, bool value)
+        {
+            long userId = GetTokenId();
+            bool result = _noteBL.IsArchive(noteId, userId, value);
+
+            try
+            {
+                if (result == true)
+                {
+                    return Ok(new { Success = true, message = "Successful" });
+                }
+                else
+                {
+                    return BadRequest(new { Success = false, message = "Unsuccessful" });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { Success = false, message = e.Message, stackTrace = e.StackTrace });
+            }
+        }
+
+        [HttpGet]
+        [Route("GetTrashedNotes")]
+        public IActionResult GetTrash()
+        {
+            try
+            {
+                long userId = GetTokenId();
+                var trashList = _noteBL.GetTrash(userId);
+
+                if (trashList.Count != 0)
+                {
+                    return this.Ok(new { Success = true, message = "These are your Trashed Notes.", Data = trashList });
+                }
+                else if (trashList.Count == 0)
+                {
+                    return BadRequest(new { Success = false, message = "There are no trashed notes." });
+                }
+                else
+                {
+                    return BadRequest(new { Success = false, message = "Something went wrong." });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { Success = false, message = e.Message, stackTrace = e.StackTrace });
+            }
+        }
+
+        [HttpGet]
+        [Route("GetArchivedNotes")]
+        public IActionResult GetArchived()
+        {
+            try
+            {
+                long userId = GetTokenId();
+                var archivedList = _noteBL.GetArchived(userId);
+
+                if (archivedList.Count != 0)
+                {
+                    return this.Ok(new { Success = true, message = "These are your Archived Notes.", Data = archivedList });
+                }
+                else if (archivedList.Count == 0)
+                {
+                    return BadRequest(new { Success = false, message = "There are no Archived notes." });
+                }
+                else
+                {
+                    return BadRequest(new { Success = false, message = "Something went wrong." });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { Success = false, message = e.Message, stackTrace = e.StackTrace });
+            }
+        }
     }
 }
