@@ -10,5 +10,7 @@ namespace BusinessLayer.Interface
         bool AddCollab(long noteId, long userId, string collabEmail);
 
         List<Collaboration> GetCollab(long noteId, long userId);
+
+        bool RemoveCollab(long noteId, long userId, string collabEmail);
     }
 }

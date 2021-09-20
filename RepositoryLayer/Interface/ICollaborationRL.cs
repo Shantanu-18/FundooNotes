@@ -1,7 +1,5 @@
 ﻿using RepositoryLayer.Entity;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace RepositoryLayer.Interface
 {
@@ -10,5 +8,7 @@ namespace RepositoryLayer.Interface
         bool AddCollab(long noteId, long userId, string collabEmail);
 
         List<Collaboration> GetCollab(long noteId, long userId);
+
+        bool RemoveCollab(long noteId, long userId, string collabEmail);
     }
 }
