@@ -2,18 +2,14 @@
 using CommonLayer;
 using CommonLayer.MSMQ;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using RepositoryLayer.Entity;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace FundooNotes.Controllers
 {
@@ -36,15 +32,8 @@ namespace FundooNotes.Controllers
             return userId;
         }
 
-        [HttpGet]
-        [Authorize]
-        public IActionResult userData()
-        {
-            var useList = this._userBL.getAllUsers();
-            return this.Ok(new { Success = true, message = "Get User Data SuccessFully.", Data = useList });
-        }
-
         [HttpPost]
+        [Route("Registration")]
         public IActionResult RegisterUser(UserModel userModel)
         {
             try
@@ -68,7 +57,7 @@ namespace FundooNotes.Controllers
 
 
         [AllowAnonymous]
-        [HttpPost("Authenticate")]
+        [HttpPost("Login")]
         public IActionResult Login([FromBody] LogInModel login)
         {
             try
@@ -104,7 +93,7 @@ namespace FundooNotes.Controllers
                 {
                     string tokenString = GenerateJSONWebToken(user.Id, user.Email);
 
-                    new MsmqOperations().SendingData(tokenString);
+                    new MsmqOperations(_config).SendingData(tokenString);
 
                     return Ok(new { Success = true, message = "Reset password link is sent via mail to you." });
                 }
