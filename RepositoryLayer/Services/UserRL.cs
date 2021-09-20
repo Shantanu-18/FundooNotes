@@ -111,5 +111,12 @@ namespace BusinessLayer.Services
                 throw;
             }
         }
+
+        public User GetEmail(string email)
+        {
+            var result = _userContext.Users.FirstOrDefault(e => e.Email == email);
+
+            return result;
+        }
     }
 }
