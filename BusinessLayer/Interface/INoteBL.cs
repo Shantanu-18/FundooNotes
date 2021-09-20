@@ -20,12 +20,20 @@ namespace BusinessLayer.Interface
 
         bool IsPinned(long noteId, long userId);
 
-        bool IsTrash(long noteId, long userId, bool value);
+        bool IsTrash(long noteId, long userId);
 
-        bool IsArchive(long noteId, long userId, bool value);
+        bool IsArchive(long noteId, long userId);
 
         List<Note> GetTrash(long userId);
 
         List<Note> GetArchived(long userId);
+
+        bool EmptyTrash(long userId);
+
+        bool DeleteForever(long noteId, long userId);
+
+        bool Restore(long noteId, long userId);
+
+        bool UnArchive(long noteId, long userId);
     }
 }
