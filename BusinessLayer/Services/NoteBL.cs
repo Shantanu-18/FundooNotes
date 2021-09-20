@@ -89,11 +89,11 @@ namespace BusinessLayer.Services
             }
         }
 
-        public bool IsTrash(long noteId, long userId, bool value)
+        public bool IsTrash(long noteId, long userId)
         {
             try
             {
-                return _noteRL.IsTrash(noteId, userId, value);
+                return _noteRL.IsTrash(noteId, userId);
             }
             catch (Exception)
             {
@@ -101,11 +101,11 @@ namespace BusinessLayer.Services
             }
         }
 
-        public bool IsArchive(long noteId, long userId, bool value)
+        public bool IsArchive(long noteId, long userId)
         {
             try
             {
-                return _noteRL.IsArchive(noteId, userId, value);
+                return _noteRL.IsArchive(noteId, userId);
             }
             catch (Exception)
             {
@@ -130,6 +130,54 @@ namespace BusinessLayer.Services
             try
             {
                 return _noteRL.GetArchived(userId);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool EmptyTrash(long userId)
+        {
+            try
+            {
+                return _noteRL.EmptyTrash(userId);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool DeleteForever(long noteId, long userId)
+        {
+            try
+            {
+                return _noteRL.DeleteForever(noteId, userId);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool Restore(long noteId, long userId)
+        {
+            try
+            {
+                return _noteRL.Restore(noteId, userId);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool UnArchive(long noteId, long userId)
+        {
+            try
+            {
+                return _noteRL.UnArchive(noteId, userId);
             }
             catch (Exception)
             {
