@@ -75,5 +75,29 @@ namespace FundooNotes.Controllers
                 return BadRequest(new { Success = false, message = e.Message, stackTrace = e.StackTrace });
             }
         }
+
+        [HttpDelete]
+        [Route("noteId/RemoveCollaboration")]
+        public IActionResult RemoveCollab(long noteId, CollaborationModel collaborationModel)
+        {
+            try
+            {
+                long userId = GetTokenId();
+                var result = _collaborationBL.RemoveCollab(noteId, userId, collaborationModel.collabEmail);
+
+                if (result == true)
+                {
+                    return Ok(new { Success = true, message = "Collaboration Removed Successfully." });
+                }
+                else
+                {
+                    return BadRequest(new { Success = false, message = "Removing Collaboration failed." });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { success = false, message = e.Message, stackTrace = e.StackTrace });
+            }
+        }
     }
 }
