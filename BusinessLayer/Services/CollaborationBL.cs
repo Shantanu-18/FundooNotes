@@ -14,7 +14,7 @@ namespace BusinessLayer.Services
         private INoteRL _noteRL;
         private IUserRL _userRL;
 
-        public CollaborationBL(ICollaborationRL collaborationRL,INoteRL noteRL,IUserRL userRL)
+        public CollaborationBL(ICollaborationRL collaborationRL, INoteRL noteRL, IUserRL userRL)
         {
             _collaborationRL = collaborationRL;
             _noteRL = noteRL;
@@ -50,6 +50,18 @@ namespace BusinessLayer.Services
             try
             {
                 return _collaborationRL.GetCollab(noteId, userId);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool RemoveCollab(long noteId, long userId, string collabEmail)
+        {
+            try
+            {
+                return _collaborationRL.RemoveCollab(noteId, userId, collabEmail);
             }
             catch (Exception)
             {

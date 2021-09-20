@@ -52,5 +52,30 @@ namespace RepositoryLayer.Services
                 throw;
             }
         }
+
+        public bool RemoveCollab(long noteId, long userId, string collabEmail)
+        {
+            try
+            {
+                var result = _userContext.Collaborations.FirstOrDefault(e => e.NoteId == noteId
+                                                                            && e.UserId == userId
+                                                                            && e.CollabEmail == collabEmail);
+
+                if (result != null)
+                {
+                    _userContext.Collaborations.Remove(result);
+                    _userContext.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
