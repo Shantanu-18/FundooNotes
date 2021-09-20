@@ -25,5 +25,7 @@ namespace RepositoryLayer.Entity
         public DateTime? ModifiedAt { get; set; }
 
         public virtual List<Note> notes { get; set; }
+
+        public ICollection<Collaboration> Collaborations { get; set; }
     }
 }
