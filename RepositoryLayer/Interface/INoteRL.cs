@@ -2,7 +2,6 @@
 using RepositoryLayer.Entity;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace RepositoryLayer.Interface
 {
@@ -37,5 +36,11 @@ namespace RepositoryLayer.Interface
         bool Restore(long noteId, long userId);
 
         bool UnArchive(long noteId, long userId);
+
+        bool AddRemainder(long noteId, long userId, DateTime dateTime);
+
+        bool DeleteRemainder(long noteId, long userId);
+
+        bool ChangeRemainder(long noteId, long userId, DateTime dateTime);
     }
 }
