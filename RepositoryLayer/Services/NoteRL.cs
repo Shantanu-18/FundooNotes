@@ -413,7 +413,8 @@ namespace RepositoryLayer.Services
         {
             try
             {
-                var result = _userContext.Notes.FirstOrDefault(e => e.Id == noteId && e.UserId == userId && e.Remainder != null);
+                var result = _userContext.Notes.FirstOrDefault(e => e.Id == noteId && e.UserId == userId
+                                                                 && e.isArchive == false && e.isTrash == false) ;
 
                 if (result != null)
                 {
