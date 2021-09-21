@@ -278,11 +278,11 @@ namespace FundooNotes.Controllers
         [Route("noteId/Unarchive")]
         public IActionResult Unarchive(long noteId)
         {
-            long userId = GetTokenId();
-            bool result = _noteBL.UnArchive(noteId, userId);
-
             try
             {
+                long userId = GetTokenId();
+                bool result = _noteBL.UnArchive(noteId, userId);
+
                 if (result == true)
                 {
                     return Ok(new { Success = true, message = "Note Unarchived Successfully." });
@@ -290,6 +290,54 @@ namespace FundooNotes.Controllers
                 else
                 {
                     return BadRequest(new { Success = false, message = "Unsuccessful" });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { Success = false, message = e.Message, stackTrace = e.StackTrace });
+            }
+        }
+
+        [HttpPut]
+        [Route("noteId/AddRemainder")]
+        public IActionResult AddRemainder(long noteId, DateTime dateTime)
+        {
+            try
+            {
+                long userId = GetTokenId();
+                bool result = _noteBL.AddRemainder(noteId, userId, dateTime);
+
+                if (result == true)
+                {
+                    return Ok(new { Success = true, message = "Note Remainder added Successfully." });
+                }
+                else
+                {
+                    return BadRequest(new { Success = false, message = "Failed to added Note Remainder." });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { Success = false, message = e.Message, stackTrace = e.StackTrace });
+            }
+        }
+
+        [HttpPut]
+        [Route("noteId/ChangeRemainder")]
+        public IActionResult ChangeRemainder(long noteId, DateTime dateTime)
+        {
+            try
+            {
+                long userId = GetTokenId();
+                bool result = _noteBL.ChangeRemainder(noteId, userId, dateTime);
+
+                if (result == true)
+                {
+                    return Ok(new { Success = true, message = "Note Remainder changed Successfully." });
+                }
+                else
+                {
+                    return BadRequest(new { Success = false, message = "No Remainder is added to this note." });
                 }
             }
             catch (Exception e)
@@ -369,6 +417,30 @@ namespace FundooNotes.Controllers
                 return this.BadRequest(new { success = false, message = e.Message, stackTrace = e.StackTrace });
             }
 
+        }
+
+        [HttpDelete]
+        [Route("noteId/Remainder")]
+        public IActionResult DeleteRemainder(long noteId)
+        {
+            try
+            {
+                long userId = GetTokenId();
+                bool result = _noteBL.DeleteRemainder(noteId, userId);
+
+                if (result == true)
+                {
+                    return Ok(new { Success = true, message = "Note Remainder removed Successfully." });
+                }
+                else
+                {
+                    return BadRequest(new { Success = false, message = "No Remainder is added to this note." });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { Success = false, message = e.Message, stackTrace = e.StackTrace });
+            }
         }
     }
 }
