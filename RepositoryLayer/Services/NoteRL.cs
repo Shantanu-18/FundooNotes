@@ -360,5 +360,77 @@ namespace RepositoryLayer.Services
                 throw;
             }
         }
+
+        public bool AddRemainder(long noteId, long userId, DateTime dateTime)
+        {
+            try
+            {
+                var result = _userContext.Notes.FirstOrDefault(e => e.Id == noteId && e.UserId == userId && e.Remainder == null);
+
+                if (result != null)
+                {
+                    result.Remainder = dateTime;
+
+                    result.ModifiedAt = DateTime.Now;
+                }
+                int changes = _userContext.SaveChanges();
+
+                if (changes > 0) return true;
+
+                else return false;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool DeleteRemainder(long noteId, long userId)
+        {
+            try
+            {
+                var result = _userContext.Notes.FirstOrDefault(e => e.Id == noteId && e.UserId == userId && e.Remainder != null);
+
+                if (result != null)
+                {
+                    result.Remainder = null;
+
+                    result.ModifiedAt = DateTime.Now;
+                }
+                int changes = _userContext.SaveChanges();
+
+                if (changes > 0) return true;
+
+                else return false;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool ChangeRemainder(long noteId, long userId, DateTime dateTime)
+        {
+            try
+            {
+                var result = _userContext.Notes.FirstOrDefault(e => e.Id == noteId && e.UserId == userId && e.Remainder != null);
+
+                if (result != null)
+                {
+                    result.Remainder = dateTime;
+
+                    result.ModifiedAt = DateTime.Now;
+                }
+                int changes = _userContext.SaveChanges();
+
+                if (changes > 0) return true;
+
+                else return false;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

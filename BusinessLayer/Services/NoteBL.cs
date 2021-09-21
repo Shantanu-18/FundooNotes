@@ -184,5 +184,41 @@ namespace BusinessLayer.Services
                 throw;
             }
         }
+
+        public bool AddRemainder(long noteId, long userId, DateTime dateTime)
+        {
+            try
+            {
+                return _noteRL.AddRemainder(noteId, userId, dateTime);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool DeleteRemainder(long noteId, long userId)
+        {
+            try
+            {
+                return _noteRL.DeleteRemainder(noteId, userId);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool ChangeRemainder(long noteId, long userId, DateTime dateTime)
+        {
+            try
+            {
+                return _noteRL.ChangeRemainder(noteId, userId, dateTime);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
