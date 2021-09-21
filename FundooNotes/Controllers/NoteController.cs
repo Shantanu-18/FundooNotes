@@ -130,7 +130,7 @@ namespace FundooNotes.Controllers
         }
 
         [HttpPut]
-        [Route("noteId/Update")]
+        [Route("{noteId}/Update")]
         public IActionResult UpdateNotes(long noteId, NotesModel notesModel)
         {
             try
@@ -155,7 +155,7 @@ namespace FundooNotes.Controllers
         }
 
         [HttpPut]
-        [Route("noteId/ChangeColour")]
+        [Route("{noteId}/Colour")]
         public IActionResult ChangeColor(long noteId, NotesModel notesModel)
         {
             long userId = GetTokenId();
@@ -179,7 +179,7 @@ namespace FundooNotes.Controllers
         }
 
         [HttpPut]
-        [Route("noteId/Pin")]
+        [Route("{noteId}/Pin")]
         public IActionResult IsPinned(long noteId)
         {
             long userId = GetTokenId();
@@ -202,32 +202,9 @@ namespace FundooNotes.Controllers
             }
         }
 
-        [HttpPut]
-        [Route("noteId/Trash")]
-        public IActionResult IsTrash(long noteId)
-        {
-            long userId = GetTokenId();
-            bool result = _noteBL.IsTrash(noteId, userId);
-
-            try
-            {
-                if (result == true)
-                {
-                    return Ok(new { Success = true, message = "Note moved to trash Successfully." });
-                }
-                else
-                {
-                    return BadRequest(new { Success = false, message = "Unsuccessful" });
-                }
-            }
-            catch (Exception e)
-            {
-                return BadRequest(new { Success = false, message = e.Message, stackTrace = e.StackTrace });
-            }
-        }
 
         [HttpPut]
-        [Route("noteId/Restore")]
+        [Route("{noteId}/Trash/Restore")]
         public IActionResult Restore(long noteId)
         {
             try
@@ -251,7 +228,7 @@ namespace FundooNotes.Controllers
         }
 
         [HttpPut]
-        [Route("noteId/Archive")]
+        [Route("{noteId}/Archive")]
         public IActionResult IsArchive(long noteId)
         {
             long userId = GetTokenId();
@@ -275,7 +252,7 @@ namespace FundooNotes.Controllers
         }
 
         [HttpPut]
-        [Route("noteId/Unarchive")]
+        [Route("{noteId}/Archive/Unarchive")]
         public IActionResult Unarchive(long noteId)
         {
             try
@@ -299,31 +276,7 @@ namespace FundooNotes.Controllers
         }
 
         [HttpPut]
-        [Route("noteId/AddRemainder")]
-        public IActionResult AddRemainder(long noteId, DateTime dateTime)
-        {
-            try
-            {
-                long userId = GetTokenId();
-                bool result = _noteBL.AddRemainder(noteId, userId, dateTime);
-
-                if (result == true)
-                {
-                    return Ok(new { Success = true, message = "Note Remainder added Successfully." });
-                }
-                else
-                {
-                    return BadRequest(new { Success = false, message = "Failed to added Note Remainder." });
-                }
-            }
-            catch (Exception e)
-            {
-                return BadRequest(new { Success = false, message = e.Message, stackTrace = e.StackTrace });
-            }
-        }
-
-        [HttpPut]
-        [Route("noteId/ChangeRemainder")]
+        [Route("{noteId}/Remainder")]
         public IActionResult ChangeRemainder(long noteId, DateTime dateTime)
         {
             try
@@ -347,7 +300,31 @@ namespace FundooNotes.Controllers
         }
 
         [HttpDelete]
-        [Route("EmptyTrash")]
+        [Route("{noteId}/Trash")]
+        public IActionResult IsTrash(long noteId)
+        {
+            long userId = GetTokenId();
+            bool result = _noteBL.IsTrash(noteId, userId);
+
+            try
+            {
+                if (result == true)
+                {
+                    return Ok(new { Success = true, message = "Note moved to trash Successfully." });
+                }
+                else
+                {
+                    return BadRequest(new { Success = false, message = "Unsuccessful" });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { Success = false, message = e.Message, stackTrace = e.StackTrace });
+            }
+        }
+
+        [HttpDelete]
+        [Route("Trash/Empty")]
         public IActionResult EmptyTrash()
         {
             try
@@ -371,7 +348,7 @@ namespace FundooNotes.Controllers
         }
 
         [HttpDelete]
-        [Route("noteId/DeleteForever")]
+        [Route("{noteId}/Trash/Delete")]
         public IActionResult DeleteForever(long noteId)
         {
             try
@@ -395,32 +372,7 @@ namespace FundooNotes.Controllers
         }
 
         [HttpDelete]
-        [Route("noteId/Delete")]
-        public IActionResult DeleteNotes(long id)
-        {
-            try
-            {
-                long userId = GetTokenId();
-                var result = this._noteBL.DeleteNotes(id, userId);
-
-                if (result == true)
-                {
-                    return this.Ok(new { Success = true, message = "Note Deleted SuccessFully.", id });
-                }
-                else
-                {
-                    return this.BadRequest(new { Success = false, message = "Note deletion failed." });
-                }
-            }
-            catch (Exception e)
-            {
-                return this.BadRequest(new { success = false, message = e.Message, stackTrace = e.StackTrace });
-            }
-
-        }
-
-        [HttpDelete]
-        [Route("noteId/Remainder")]
+        [Route("{noteId}/Remainder")]
         public IActionResult DeleteRemainder(long noteId)
         {
             try

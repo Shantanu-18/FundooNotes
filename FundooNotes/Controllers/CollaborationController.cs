@@ -20,12 +20,11 @@ namespace FundooNotes.Controllers
 
         private long GetTokenId()
         {
-            long userId = Convert.ToInt64(User.FindFirst("Id").Value);
-            return userId;
+            return Convert.ToInt64(User.FindFirst("Id").Value);
         }
 
         [HttpPost]
-        [Route("noteId/AddCollaboration")]
+        [Route("{noteId}")]
         public IActionResult AddCollab(long noteId, CollaborationModel collaboration)
         {
             try
@@ -49,7 +48,7 @@ namespace FundooNotes.Controllers
         }
 
         [HttpGet]
-        [Route("noteId/GetCollaborations")]
+        [Route("{noteId}")]
         public IActionResult GetCollab(long noteId)
         {
             try
@@ -77,7 +76,7 @@ namespace FundooNotes.Controllers
         }
 
         [HttpDelete]
-        [Route("noteId/RemoveCollaboration")]
+        [Route("{noteId}")]
         public IActionResult RemoveCollab(long noteId, CollaborationModel collaborationModel)
         {
             try
