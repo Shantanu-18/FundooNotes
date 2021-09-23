@@ -2,7 +2,7 @@
 
 namespace RepositoryLayer.Migrations
 {
-    public partial class AddedLabelsTable : Migration
+    public partial class lablesTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,8 +13,8 @@ namespace RepositoryLayer.Migrations
                     LabelId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     LabelName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NoteId = table.Column<long>(type: "bigint", nullable: false),
-                    UserId = table.Column<long>(type: "bigint", nullable: true)
+                    NoteId = table.Column<long>(type: "bigint", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -24,13 +24,13 @@ namespace RepositoryLayer.Migrations
                         column: x => x.NoteId,
                         principalTable: "Notes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Labels_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

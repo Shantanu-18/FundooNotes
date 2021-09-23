@@ -11,11 +11,11 @@ namespace RepositoryLayer.Entity
 
         public string LabelName { get; set; }
 
-        public long NoteId { get; set; }
+        public long? NoteId { get; set; }
 
         public Note Notes { get; set; }
 
-        public long? UserId { get; set; }
+        public long UserId { get; set; }
 
         public User Users { get; set; }
     }

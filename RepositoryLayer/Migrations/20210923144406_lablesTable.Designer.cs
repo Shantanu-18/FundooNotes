@@ -10,8 +10,8 @@ using RepositoryLayer.Context;
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(UserContext))]
-    [Migration("20210921140247_AddedLabelsTable")]
-    partial class AddedLabelsTable
+    [Migration("20210923144406_lablesTable")]
+    partial class lablesTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -56,10 +56,10 @@ namespace RepositoryLayer.Migrations
                     b.Property<string>("LabelName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("NoteId")
+                    b.Property<long?>("NoteId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("UserId")
+                    b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
                     b.HasKey("LabelId");
@@ -173,13 +173,13 @@ namespace RepositoryLayer.Migrations
                 {
                     b.HasOne("RepositoryLayer.Entity.Note", "Notes")
                         .WithMany("Labels")
-                        .HasForeignKey("NoteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("NoteId");
 
                     b.HasOne("RepositoryLayer.Entity.User", "Users")
                         .WithMany("Labels")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Notes");
 
