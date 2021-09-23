@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace RepositoryLayer.Entity
 {
@@ -27,5 +26,7 @@ namespace RepositoryLayer.Entity
         public virtual List<Note> notes { get; set; }
 
         public ICollection<Collaboration> Collaborations { get; set; }
+
+        public ICollection<Label> Labels { get; set; }
     }
 }
