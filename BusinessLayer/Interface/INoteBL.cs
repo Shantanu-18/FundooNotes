@@ -2,13 +2,12 @@
 using RepositoryLayer.Entity;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace BusinessLayer.Interface
 {
     public interface INoteBL
     {
-        List<Note> GetAllNotes(long userId);
+        List<Note> GetAllNotes(long userId, string userEmail);
 
         bool AddNotes(NotesModel notesModel, long Id);
 

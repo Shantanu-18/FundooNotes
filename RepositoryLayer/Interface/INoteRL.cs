@@ -7,7 +7,7 @@ namespace RepositoryLayer.Interface
 {
     public interface INoteRL
     {
-        List<Note> GetAllNotes(long userId);
+        List<Note> GetAllNotes(long userId, string userEmail);
 
         bool AddNotes(NotesModel notesModel, long Id);
 
