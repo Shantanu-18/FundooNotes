@@ -2,7 +2,10 @@
 using CommonLayer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RepositoryLayer.Entity;
 using System;
+using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace FundooNotes.Controllers
 {
@@ -21,6 +24,11 @@ namespace FundooNotes.Controllers
         private long GetTokenId()
         {
             return Convert.ToInt64(User.FindFirst("Id").Value);
+        }
+
+        private string GetEmail()
+        {
+            return User.FindFirst(ClaimTypes.Email).Value.ToString();
         }
 
         [HttpPost]
@@ -52,7 +60,8 @@ namespace FundooNotes.Controllers
             try
             {
                 long userId = GetTokenId();
-                var NotesList = _noteBL.GetAllNotes(userId);
+                string userEmail = GetEmail();
+                List<Note> NotesList = _noteBL.GetAllNotes(userId, userEmail);
 
                 if (NotesList.Count != 0)
                 {
@@ -276,7 +285,7 @@ namespace FundooNotes.Controllers
         }
 
         [HttpPut]
-        [Route("{noteId}/Remainder")]
+        [Route("{noteId}/Reminder")]
         public IActionResult ChangeRemainder(long noteId, DateTime dateTime)
         {
             try
@@ -286,11 +295,11 @@ namespace FundooNotes.Controllers
 
                 if (result == true)
                 {
-                    return Ok(new { Success = true, message = "Note Remainder changed Successfully." });
+                    return Ok(new { Success = true, message = "Note Reminder changed Successfully." });
                 }
                 else
                 {
-                    return BadRequest(new { Success = false, message = "No Remainder is added to this note." });
+                    return BadRequest(new { Success = false, message = "No Reminder is added to this note." });
                 }
             }
             catch (Exception e)
@@ -372,7 +381,7 @@ namespace FundooNotes.Controllers
         }
 
         [HttpDelete]
-        [Route("{noteId}/Remainder")]
+        [Route("{noteId}/Reminder")]
         public IActionResult DeleteRemainder(long noteId)
         {
             try
@@ -382,11 +391,11 @@ namespace FundooNotes.Controllers
 
                 if (result == true)
                 {
-                    return Ok(new { Success = true, message = "Note Remainder removed Successfully." });
+                    return Ok(new { Success = true, message = "Note Reminder removed Successfully." });
                 }
                 else
                 {
-                    return BadRequest(new { Success = false, message = "No Remainder is added to this note." });
+                    return BadRequest(new { Success = false, message = "No Reminder is added to this note." });
                 }
             }
             catch (Exception e)
