@@ -41,6 +41,9 @@ namespace FundooNotes
             services.AddTransient<ICollaborationBL, CollaborationBL>();
             services.AddTransient<ICollaborationRL, CollaborationRL>();
 
+            services.AddTransient<ILabelBL, LabelBL>();
+            services.AddTransient<ILabelRL, LabelRL>();
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
@@ -82,6 +85,8 @@ namespace FundooNotes
             });
 
             services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(x =>
+                    x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
