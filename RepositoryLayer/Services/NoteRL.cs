@@ -52,13 +52,18 @@ namespace RepositoryLayer.Services
         }
 
 
-        public List<Note> GetAllNotes(long userId)
+        public List<Note> GetAllNotes(long userId, string userEmail)
         {
             try
             {
-                var result = _userContext.Notes.Where(e => e.UserId == userId
-                                                         && e.isArchive == false
-                                                         && e.isTrash == false).ToList();
+                var result = _userContext.Notes.Where(e => e.UserId == userId && e.isArchive == false && e.isTrash == false).ToList();
+                
+                var collabNotes = _userContext.Collaborations.Where(e => e.CollabEmail == userEmail).ToList();
+                foreach (var collabNote in collabNotes)
+                {
+                    var addCollab = _userContext.Notes.SingleOrDefault(e => e.Id == collabNote.NoteId);
+                    result.Add(addCollab);
+                }
 
                 return result;
             }
@@ -414,7 +419,7 @@ namespace RepositoryLayer.Services
             try
             {
                 var result = _userContext.Notes.FirstOrDefault(e => e.Id == noteId && e.UserId == userId
-                                                                 && e.isArchive == false && e.isTrash == false) ;
+                                                                 && e.isArchive == false && e.isTrash == false);
 
                 if (result != null)
                 {
