@@ -1,4 +1,5 @@
 ﻿using CommonLayer;
+using Microsoft.AspNetCore.Http;
 using RepositoryLayer.Entity;
 using System;
 using System.Collections.Generic;
@@ -40,5 +41,9 @@ namespace BusinessLayer.Interface
         bool DeleteRemainder(long noteId, long userId);
 
         bool ChangeRemainder(long noteId, long userId, DateTime dateTime);
+
+        bool AddImage(long noteId, long userId, IFormFile formFile);
+
+        bool DeleteImage(long noteId, long userId);
     }
 }
