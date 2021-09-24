@@ -15,5 +15,13 @@ namespace RepositoryLayer.Interface
         bool AddLabelToUser(long userId, LabelModel labelModel);
 
         List<Label> GetUserLabels(long userId);
+
+        bool EditLabelName(long labelId, long userId, LabelModel labelModel);
+
+        bool RemoveLabel(long labelId, long noteId, long userId);
+
+        bool DeleteLabel(long userId, string labelName);
+
+        bool AddNoteToExistingLabel(long noteId, long userId, LabelModel labelModel);
     }
 }
