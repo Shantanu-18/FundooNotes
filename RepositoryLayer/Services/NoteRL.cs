@@ -1,4 +1,8 @@
-﻿using CommonLayer;
+﻿using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using CommonLayer;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using RepositoryLayer.Context;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Interface;
@@ -12,11 +16,13 @@ namespace RepositoryLayer.Services
     public class NoteRL : INoteRL
     {
         private UserContext _userContext;
+        private IConfiguration _config;
         Note note = new Note();
 
-        public NoteRL(UserContext userContext)
+        public NoteRL(UserContext userContext, IConfiguration configuration)
         {
             _userContext = userContext;
+            _config = configuration;
         }
 
         public bool AddNotes(NotesModel notesModel, long userId)
@@ -57,7 +63,7 @@ namespace RepositoryLayer.Services
             try
             {
                 var result = _userContext.Notes.Where(e => e.UserId == userId && e.isArchive == false && e.isTrash == false).ToList();
-                
+
                 var collabNotes = _userContext.Collaborations.Where(e => e.CollabEmail == userEmail).ToList();
                 foreach (var collabNote in collabNotes)
                 {
@@ -424,6 +430,62 @@ namespace RepositoryLayer.Services
                 if (result != null)
                 {
                     result.Remainder = dateTime;
+
+                    result.ModifiedAt = DateTime.Now;
+                }
+                int changes = _userContext.SaveChanges();
+
+                if (changes > 0) return true;
+
+                else return false;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool AddImage(long noteId, long userId, IFormFile formFile)
+        {
+            try
+            {
+                var result = _userContext.Notes.FirstOrDefault(e => e.Id == noteId && e.UserId == userId);
+
+                if (result != null)
+                {
+                    Account account = new Account(_config["CloudinaryAccount:CloudName"],
+                                                  _config["CloudinaryAccount:ApiKey"],
+                                                  _config["CloudinaryAccount:ApiSecret"]);
+
+                    Cloudinary cloudinary = new Cloudinary(account);
+                    var uploadParams = new ImageUploadParams()
+                    {
+                        File = new FileDescription(formFile.FileName, formFile.OpenReadStream()),
+                    };
+                    var uploadResult = cloudinary.Upload(uploadParams);
+                    Uri x = uploadResult.Url;
+                    result.image = x.ToString();
+                    _userContext.SaveChanges();
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool DeleteImage(long noteId, long userId)
+        {
+            try
+            {
+                var result = _userContext.Notes.FirstOrDefault(e => e.Id == noteId && e.UserId == userId && e.image != null);
+
+                if (result != null)
+                {
+                    result.image = null;
 
                     result.ModifiedAt = DateTime.Now;
                 }

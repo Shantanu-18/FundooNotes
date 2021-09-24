@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Interface;
 using CommonLayer;
+using Microsoft.AspNetCore.Http;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Interface;
 using System;
@@ -214,6 +215,30 @@ namespace BusinessLayer.Services
             try
             {
                 return _noteRL.ChangeRemainder(noteId, userId, dateTime);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool AddImage(long noteId, long userId, IFormFile formFile)
+        {
+            try
+            {
+                return _noteRL.AddImage(noteId, userId, formFile);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool DeleteImage(long noteId, long userId)
+        {
+            try
+            {
+                return _noteRL.DeleteImage(noteId, userId);
             }
             catch (Exception)
             {
