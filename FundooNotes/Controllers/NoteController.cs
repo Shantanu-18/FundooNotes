@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.Interface;
 using CommonLayer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Entity;
 using System;
@@ -300,6 +301,54 @@ namespace FundooNotes.Controllers
                 else
                 {
                     return BadRequest(new { Success = false, message = "No Reminder is added to this note." });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { Success = false, message = e.Message, stackTrace = e.StackTrace });
+            }
+        }
+
+        [HttpPut]
+        [Route("{noteId}/Image")]
+        public IActionResult AddImage(long noteId, IFormFile formFile)
+        {
+            try
+            {
+                long userId = GetTokenId();
+                bool result = _noteBL.AddImage(noteId, userId, formFile);
+
+                if (result == true)
+                {
+                    return Ok(new { Success = true, message = "Image added Successfully." });
+                }
+                else
+                {
+                    return BadRequest(new { Success = false, message = "Failed to add image." });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { Success = false, message = e.Message, stackTrace = e.StackTrace });
+            }
+        }
+
+        [HttpDelete]
+        [Route("{noteId}/Image")]
+        public IActionResult DeleteImage(long noteId)
+        {
+            try
+            {
+                long userId = GetTokenId();
+                bool result = _noteBL.DeleteImage(noteId, userId);
+
+                if (result == true)
+                {
+                    return Ok(new { Success = true, message = "Image removed from the note Successfully." });
+                }
+                else
+                {
+                    return BadRequest(new { Success = false, message = "Failed to remove image." });
                 }
             }
             catch (Exception e)
