@@ -100,11 +100,11 @@ namespace BusinessLayer.Services
             }
         }
 
-        public bool AddNoteToExistingLabel(long noteId, long userId, LabelModel labelModel)
+        public bool AddNoteToExistingLabel(long noteId, long userId, string labelName)
         {
             try
             {
-                return _labelRL.AddNoteToExistingLabel(noteId, userId, labelModel);
+                return _labelRL.AddNoteToExistingLabel(noteId, userId, labelName);
             }
             catch (Exception)
             {

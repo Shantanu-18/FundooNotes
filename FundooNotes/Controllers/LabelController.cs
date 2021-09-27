@@ -54,17 +54,18 @@ namespace FundooNotes.Controllers
         }
 
         [HttpPost]
-        [Route("{noteId}/Existing")]
-        public IActionResult AddNoteToExistingLabel(long noteId, LabelModel labelModel)
+        [Route("{noteId}/{labelName}")]
+        public IActionResult AddNoteToExistingLabel(long noteId,string labelName)
         {
             try
             {
+                LabelModel labelModel = new LabelModel();
                 long userId = GetTokenId();
-                bool result = _labelBL.AddNoteToExistingLabel(noteId, userId, labelModel);
+                bool result = _labelBL.AddNoteToExistingLabel(noteId, userId, labelName);
 
                 if (result == true)
                 {
-                    return Ok(new { Success = true, message = $"Note added to {labelModel.labelName} Successfully !!" });
+                    return Ok(new { Success = true, message = $"Note added to {labelName} Successfully !!" });
                 }
                 else
                 {

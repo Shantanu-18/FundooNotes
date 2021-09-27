@@ -172,15 +172,15 @@ namespace RepositoryLayer.Services
             }
         }
 
-        public bool AddNoteToExistingLabel(long noteId, long userId, LabelModel labelModel)
+        public bool AddNoteToExistingLabel(long noteId, long userId, string labelName)
         {
             try
             {
-                var checkLabel = _userContext.Labels.FirstOrDefault(l => l.LabelName == labelModel.labelName && l.UserId == userId);
+                var checkLabel = _userContext.Labels.FirstOrDefault(l => l.LabelName == labelName && l.UserId == userId);
 
                 if (checkLabel != null)
                 {
-                    label.LabelName = labelModel.labelName;
+                    label.LabelName = labelName;
                     label.NoteId = noteId;
                     label.UserId = userId;
 

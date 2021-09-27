@@ -22,6 +22,6 @@ namespace RepositoryLayer.Interface
 
         bool DeleteLabel(long userId, string labelName);
 
-        bool AddNoteToExistingLabel(long noteId, long userId, LabelModel labelModel);
+        bool AddNoteToExistingLabel(long noteId, long userId, string labelName);
     }
 }
