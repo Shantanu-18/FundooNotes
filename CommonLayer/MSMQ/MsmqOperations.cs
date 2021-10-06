@@ -73,8 +73,8 @@ namespace CommonLayer.MSMQ
 
             var body = new StringBuilder();
 
-            body.AppendLine("Hello, To Reset your Account Password click the link below.");
-            body.AppendLine("<a href=\"https://localhost:5001/User/ResetPassword/" + token + "\">Click Here</a>");
+            body.AppendLine("Hello, To Reset your Account Password click this link.");
+            body.AppendLine("<a href=\"http://localhost:4200/resetPassword/" + token + "\">Click Here</a>");
             mailMessage.Body = body.ToString();
             mailMessage.IsBodyHtml = true;
 
