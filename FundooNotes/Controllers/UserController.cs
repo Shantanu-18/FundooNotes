@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using RepositoryLayer.Entity;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -141,6 +142,33 @@ namespace FundooNotes.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet("allUsers")]
+        public IActionResult GetUsers()
+        {
+            try
+            {
+                long userId = GetTokenId();
+                List<string> userList = _userBL.getAllUsers(userId);
+
+                if (userList.Count != 0)
+                {
+                    return this.Ok(new { Success = true, message = "These are all the users.", Data = userList });
+                }
+                else if (userList.Count == 0)
+                {
+                    return Ok(new { Success = true, message = "No user is registred yet." });
+                }
+                else
+                {
+                    return BadRequest(new { Success = false, message = "Something went wrong." });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { Success = false, message = e.Message, stackTrace = e.StackTrace });
+            }
+        }
 
         private string GenerateJSONWebToken(long Id, string email)
         {

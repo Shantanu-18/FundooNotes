@@ -30,11 +30,11 @@ namespace BusinessLayer.Services
         /// Gets all users.
         /// </summary>
         /// <returns></returns>
-        public List<UserModel> getAllUsers()
+        public List<string> getAllUsers(long userId)
         {
             try
             {
-                return this._userRL.getAllUsers();
+                return this._userRL.getAllUsers(userId);
             }
             catch (Exception)
             {

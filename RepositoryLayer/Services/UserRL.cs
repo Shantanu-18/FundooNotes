@@ -20,15 +20,13 @@ namespace BusinessLayer.Services
         }
 
 
-        public List<UserModel> getAllUsers()
+        public List<string> getAllUsers(long userId)
         {
             try
             {
-                List<UserModel> userModels = new List<UserModel>();
-                //userModels.Add(new UserModel { FirstName = "Shantanu", LastName = "Borkar", Email = "asasd@ga" });
-                //userModels.Add(new UserModel { FirstName = "Xyz", LastName = "Abc", Email = "asasd@ga" });
+                var result = _userContext.Users.Where(e => e.Id != userId).Select(s=>s.Email).ToList();
 
-                return userModels;
+                return result;
             }
             catch (Exception)
             {
