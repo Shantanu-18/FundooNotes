@@ -62,7 +62,7 @@ namespace FundooNotes.Controllers
                 }
                 else if (collabList.Count == 0)
                 {
-                    return BadRequest(new { Success = false, message = "No collaboration found." });
+                    return Ok(new { Success = true, message = "No collaboration found." });
                 }
                 else
                 {

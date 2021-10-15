@@ -70,7 +70,7 @@ namespace FundooNotes.Controllers
                 }
                 else if (NotesList.Count == 0)
                 {
-                    return BadRequest(new { Success = false, message = "Nothing is added in notes." });
+                    return Ok(new { Success = true, message = "Nothing is added in notes." });
                 }
                 else
                 {
@@ -98,7 +98,7 @@ namespace FundooNotes.Controllers
                 }
                 else if (archivedList.Count == 0)
                 {
-                    return BadRequest(new { Success = false, message = "There are no Archived notes." });
+                    return Ok(new { Success = true, message = "There are no Archived notes." });
                 }
                 else
                 {
@@ -126,7 +126,7 @@ namespace FundooNotes.Controllers
                 }
                 else if (trashList.Count == 0)
                 {
-                    return BadRequest(new { Success = false, message = "There are no trashed notes." });
+                    return Ok(new { Success = true, message = "There are no trashed notes." });
                 }
                 else
                 {
