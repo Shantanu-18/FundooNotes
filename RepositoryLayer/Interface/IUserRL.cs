@@ -8,7 +8,7 @@ namespace BusinessLayer.Interface
 {
     public interface IUserRL
     {
-        List<UserModel> getAllUsers();
+        List<string> getAllUsers(long userId);
 
         bool RegisterUser(UserModel userModel);
 
