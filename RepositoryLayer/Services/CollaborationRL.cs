@@ -22,16 +22,25 @@ namespace RepositoryLayer.Services
         {
             try
             {
-                collaboration.CollabEmail = collabEmail;
-                collaboration.UserId = userId;
-                collaboration.NoteId = noteId;
-                _userContext.Collaborations.Add(collaboration);
+                var result = _userContext.Collaborations.FirstOrDefault(e => e.NoteId == noteId
+                                                                            && e.UserId == userId
+                                                                            && e.CollabEmail == collabEmail);
+                if (result == null)
+                {
+                    collaboration.CollabEmail = collabEmail;
+                    collaboration.UserId = userId;
+                    collaboration.NoteId = noteId;
+                    _userContext.Collaborations.Add(collaboration);
 
-                var changes = _userContext.SaveChanges();
+                    var changes = _userContext.SaveChanges();
 
-                if (changes > 0) return true;
+                    if (changes > 0) return true;
 
-                else return true;
+                    else return false;
+                }
+
+                else return false;
+
             }
             catch (Exception)
             {
